@@ -29,6 +29,7 @@ service RPIService {
   // Graphics device service points
   rpc graphicsInit(GraphicsInitRequest) returns (stream CommandOutput) {}
   rpc graphicsDump(google.protobuf.Empty) returns (stream CommandOutput) {}
+  rpc graphicsRescale(GraphicsRescaleRequest) returns (stream CommandOutput) {}
   rpc graphicsReset(google.protobuf.Empty) returns (stream CommandOutput) {}
 
   // HTML viewer service points
@@ -239,6 +240,12 @@ message GraphicsInitRequest {
   string snapshotDirectory = 1;
   ScreenParameters screenParameters = 2;
   double scaleFactor = 3;
+}
+
+message GraphicsRescaleRequest {
+  int32 snapshotNumber = 1;
+  double newWidth = 2;
+  double newHeight = 3;
 }
 
 message ChunkParameters {
