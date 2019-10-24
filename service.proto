@@ -1,0 +1,403 @@
+/*
+ * Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ */
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_package = "org.jetbrains.r.rinterop";
+
+package rplugininterop;
+
+service RPIService {
+  rpc getInfo(google.protobuf.Empty) returns (GetInfoResponse) {}
+
+  rpc init(Init) returns (stream CommandOutput) {}
+  rpc quit(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+
+  rpc executeCode(ExecuteCodeRequest) returns (stream CommandOutput) {}
+  rpc sourceFile(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+
+  rpc replExecute(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc replSendReadLn(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc replSendDebuggerCommand(DebuggerCommandRequest) returns (google.protobuf.Empty) {}
+  rpc replInterrupt(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc replGetNextEvent(google.protobuf.Empty) returns (ReplEvent) {}
+
+  // Graphics device service points
+  rpc graphicsInit(GraphicsInitRequest) returns (stream CommandOutput) {}
+  rpc graphicsDump(google.protobuf.Empty) returns (stream CommandOutput) {}
+  rpc graphicsReset(google.protobuf.Empty) returns (stream CommandOutput) {}
+
+  // HTML viewer service points
+  rpc htmlViewerInit(google.protobuf.StringValue) returns (stream CommandOutput) {}
+  rpc htmlViewerReset(google.protobuf.Empty) returns (stream CommandOutput) {}
+
+  // RMarkdown chunks
+  rpc beforeChunkExecution(ChunkParameters) returns (stream CommandOutput) {}
+  rpc afterChunkExecution(google.protobuf.Empty) returns (stream CommandOutput) {}
+
+  // Repo utils service points
+  rpc repoGetPackageVersion(google.protobuf.StringValue) returns (stream CommandOutput) {}
+  rpc repoInstallPackage(RepoInstallPackageRequest) returns (google.protobuf.Empty) {}
+  rpc repoCheckPackageInstalled(google.protobuf.StringValue) returns (stream CommandOutput) {}
+  rpc repoRemovePackage(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+
+  // Methods for RRef and RVariableLoader
+  rpc copyToPersistentRef(RRef) returns (google.protobuf.Int32Value) {}
+  rpc disposePersistentRefs(PersistentRefList) returns (google.protobuf.Empty) {}
+  rpc loaderGetParentEnvs(RRef) returns (ParentEnvsResponse) {}
+  rpc loaderGetVariables(GetVariablesRequest) returns (VariablesResponse) {}
+  rpc loaderGetLoadedNamespaces(google.protobuf.Empty) returns (StringList) {}
+  rpc loaderGetValueInfo(RRef) returns (ValueInfo) {}
+  rpc evaluateAsText(RRef) returns (google.protobuf.StringValue) {}
+  rpc evaluateAsBoolean(RRef) returns (google.protobuf.BoolValue) {}
+  rpc evaluateAsStringList(RRef) returns (StringList) {}
+  rpc loadObjectNames(RRef) returns (StringList) {}
+  rpc findAllNamedArguments(RRef) returns (StringList) {}
+  rpc getTableColumnsInfo(TableColumnsInfoRequest) returns (TableColumnsInfo) {}
+  rpc getFormalArguments(RRef) returns (StringList) {}
+  rpc getRMarkdownChunkOptions(google.protobuf.Empty) returns (StringList) {}
+
+  // Data frame viewer
+  rpc dataFrameRegister(RRef) returns (google.protobuf.Int32Value) {}
+  rpc dataFrameGetInfo(RRef) returns (DataFrameInfoResponse) {}
+  rpc dataFrameGetData(DataFrameGetDataRequest) returns (DataFrameGetDataResponse) {}
+  rpc dataFrameSort(DataFrameSortRequest) returns (google.protobuf.Int32Value) {}
+  rpc dataFrameFilter(DataFrameFilterRequest) returns (google.protobuf.Int32Value) {}
+  rpc dataFrameDispose(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
+
+  // Debugging
+  rpc updateSysFrames(google.protobuf.Empty) returns (google.protobuf.Int32Value) {}
+  rpc debugWhere(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
+  rpc debugGetSysFunctionCode(google.protobuf.Int32Value) returns (google.protobuf.StringValue) {}
+  rpc debugExecute(DebugExecuteRequest) returns (google.protobuf.Empty) {}
+
+  // Documentation
+  rpc convertRd2HTML(ConvertRd2HTMLRequest) returns (stream CommandOutput) {}
+  rpc makeRdFromRoxygen(MakeRdFromRoxygenRequest) returns (stream CommandOutput) {}
+  rpc findPackagePathByTopic(FindPackagePathByTopicRequest) returns (stream CommandOutput) {}
+  rpc findPackagePathByPackageName(FindPackagePathByPackageNameRequest) returns (stream CommandOutput) {}
+
+  // Misc
+  rpc getWorkingDir(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
+  rpc setWorkingDir(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc clearEnvironment(RRef) returns (google.protobuf.Empty) {}
+  rpc loadLibrary(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+}
+
+message Init {
+  string projectDir = 1;
+  string rScriptsPath = 2;
+}
+
+message GetInfoResponse {
+  string rVersion = 1;
+}
+
+message ExecuteCodeRequest {
+  string code = 1;
+  bool withEcho = 2;
+}
+
+message CommandOutput {
+  enum Type {
+    STDOUT = 0;
+    STDERR = 1;
+  }
+  Type type = 1;
+  bytes text = 2;
+}
+
+message ReplEvent {
+  message RequestReadLn {
+    string prompt = 1;
+  }
+  message Prompt {
+    bool isDebug = 1;
+  }
+  oneof event {
+    google.protobuf.Empty busy = 1;
+    CommandOutput text = 2;
+    RequestReadLn requestReadLn = 3;
+    Prompt prompt = 4;
+    google.protobuf.Empty termination = 5;
+  }
+}
+
+message RRef {
+  message Member {
+    RRef env = 1;
+    string name = 2;
+  }
+  message ParentEnv {
+    RRef env = 1;
+    int32 index = 2;
+  }
+  message Expression {
+    RRef env = 1;
+    string code = 2;
+  }
+  message ListElement {
+    RRef list = 1;
+    int32 index = 2;
+  }
+  oneof ref {
+    int32 persistentIndex = 1;
+    google.protobuf.Empty globalEnv = 2;
+    google.protobuf.Empty currentEnv = 3;
+    int32 sysFrameIndex = 4;
+    Member member = 5;
+    ParentEnv parentEnv = 6;
+    Expression expression = 7;
+    ListElement listElement = 8;
+  }
+}
+
+message PersistentRefList {
+  repeated int32 indices = 1;
+}
+
+message ParentEnvsResponse {
+  message EnvInfo {
+    string name = 1;
+  }
+  repeated EnvInfo envs = 1;
+}
+
+message GetVariablesRequest {
+  RRef obj = 1;
+  int32 start = 2;
+  int32 end = 3;
+}
+
+message VariablesResponse {
+  message Variable {
+    string name = 1;
+    ValueInfo value = 2;
+  }
+  bool isEnv = 1;
+  int32 totalCount = 2;
+  repeated Variable vars = 3;
+}
+
+message ValueInfo {
+  message Unevaluated {
+    string code = 1;
+  }
+  message Value {
+    string textValue = 1;
+    bool isComplete = 2;
+    bool isVector = 3;
+  }
+  message List {
+    int32 length = 1;
+  }
+  message DataFrame {
+    int32 rows = 1;
+    int32 cols = 2;
+  }
+  message Function {
+    string code = 1;
+  }
+  message Environment {
+    string name = 1;
+  }
+  message Error {
+    string text = 1;
+  }
+  oneof info {
+    Unevaluated unevaluated = 1;
+    Value value = 2;
+    List list = 3;
+    DataFrame dataFrame = 4;
+    Function function = 5;
+    Environment environment = 6;
+    google.protobuf.Empty graph = 7;
+    Error error = 8;
+  }
+}
+
+message StringList {
+  repeated string list = 1;
+}
+
+message GraphicsInstallRequest {
+  string packagePath = 1;
+  string libraryPath = 2;
+  string packageType = 3;
+}
+
+message GraphicsInitRequest {
+  message ScreenParameters {
+    int32 width = 1;
+    int32 height = 2;
+    int32 resolution = 3;
+  }
+  string snapshotDirectory = 1;
+  ScreenParameters screenParameters = 2;
+  double scaleFactor = 3;
+}
+
+message ChunkParameters {
+  string rmarkdownParameters = 1;
+  string chunkText = 2;
+  string outputDirectory = 3;
+  int32 width = 4;
+  int32 height = 5;
+}
+
+message RepoInstallPackageRequest {
+  string packageName = 1;
+  map<string, string> arguments = 2;
+}
+
+message TableColumnsInfoRequest {
+  enum TableType {
+    DPLYR = 0;
+    DATA_TABLE = 1;
+  }
+  RRef ref = 1;
+  TableType tableType = 2;
+}
+
+message TableColumnsInfo {
+  message Column {
+    string name = 1;
+    string type = 2;
+  }
+  repeated Column columns = 1;
+}
+
+message DataFrameInfoResponse {
+  enum ColumnType {
+    INTEGER = 0;
+    DOUBLE = 1;
+    BOOLEAN = 3;
+    STRING = 4;
+  }
+  message Column {
+    string name = 1;
+    ColumnType type = 2;
+    bool sortable = 3;
+  }
+  int32 nRows = 1;
+  repeated Column columns = 2;
+}
+
+message DataFrameGetDataRequest {
+  RRef ref = 1;
+  int32 start = 2;
+  int32 end = 3;
+}
+
+message DataFrameGetDataResponse {
+  message Value {
+    oneof value {
+      google.protobuf.Empty na = 1;
+      int32 intValue = 2;
+      double doubleValue = 3;
+      bool booleanValue = 4;
+      string stringValue = 5;
+    }
+  }
+  message Column {
+    repeated Value values = 1;
+  }
+  repeated Column columns = 1;
+}
+
+message DataFrameSortRequest {
+  message SortKey {
+    int32 columnIndex = 1;
+    bool descending = 2;
+  }
+  RRef ref = 1;
+  repeated SortKey keys = 2;
+}
+
+message DataFrameFilterRequest {
+  message Filter {
+    message ComposedFilter {
+      enum Type {
+        AND = 0;
+        OR = 1;
+        NOT = 2;
+      }
+      Type type = 1;
+      repeated Filter filters = 2;
+    }
+    message Operator {
+      enum Type {
+        EQ = 0;
+        NEQ = 1;
+        LESS = 2;
+        GREATER = 3;
+        LEQ = 4;
+        GEQ = 5;
+        REGEX = 6;
+      }
+      int32 column = 1;
+      Type type = 2;
+      string value = 3;
+    }
+    message NaFilter {
+      int32 column = 1;
+      bool isNa = 2;
+    }
+    oneof filter {
+      google.protobuf.Empty true = 1;
+      ComposedFilter composed = 2;
+      Operator operator = 3;
+      NaFilter naFilter = 4;
+    }
+  }
+  RRef ref = 1;
+  Filter filter = 2;
+}
+
+message DebugExecuteRequest {
+  string code = 1;
+  string fileId = 2;
+}
+
+enum DebuggerCommand {
+  NEXT = 0;
+  STEP = 1;
+  CONTINUE = 2;
+  FINISH = 3;
+  QUIT = 4;
+}
+
+message DebuggerCommandRequest {
+  DebuggerCommand command = 1;
+}
+
+message ConvertRd2HTMLRequest {
+  message DBRequest {
+    string dbPath = 1;
+    string dbPage = 2;
+  }
+  oneof rdSource {
+    string rdFilePath = 1;
+    DBRequest dbRequest = 2;
+  }
+  string outputFilePath = 3;
+  string topicPackage = 4;
+}
+
+message MakeRdFromRoxygenRequest {
+  string functionName = 1;
+  string functionText = 2;
+  string outputFilePath = 3;
+}
+
+message FindPackagePathByTopicRequest {
+  string topic = 1;
+  string searchSpace = 2;
+}
+
+message FindPackagePathByPackageNameRequest {
+  string packageName = 1;
+}

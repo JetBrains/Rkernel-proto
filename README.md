@@ -1,0 +1,1 @@
+Rkernel-proto is a definition of the protocol for communication with [Rkernel](https://github.com/JetBrains/Rkernel) 
