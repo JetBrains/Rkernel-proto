@@ -12,6 +12,7 @@ package rplugininterop;
 
 service RPIService {
   rpc getInfo(google.protobuf.Empty) returns (GetInfoResponse) {}
+  rpc isBusy(google.protobuf.Empty) returns (google.protobuf.BoolValue) {}
 
   rpc init(Init) returns (stream CommandOutput) {}
   rpc quit(google.protobuf.Empty) returns (google.protobuf.Empty) {}
