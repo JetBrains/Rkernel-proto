@@ -239,7 +239,6 @@ message GraphicsInitRequest {
   }
   string snapshotDirectory = 1;
   ScreenParameters screenParameters = 2;
-  double scaleFactor = 3;
 }
 
 message GraphicsRescaleRequest {
