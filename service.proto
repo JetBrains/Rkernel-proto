@@ -87,6 +87,7 @@ service RPIService {
   rpc setWorkingDir(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
   rpc clearEnvironment(RRef) returns (google.protobuf.Empty) {}
   rpc loadLibrary(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc setOutputWidth(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
 }
 
 message Init {
