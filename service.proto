@@ -88,6 +88,7 @@ service RPIService {
   rpc clearEnvironment(RRef) returns (google.protobuf.Empty) {}
   rpc loadLibrary(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
   rpc setOutputWidth(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
+  rpc viewRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
 
 message Init {
@@ -120,12 +121,18 @@ message ReplEvent {
   message Prompt {
     bool isDebug = 1;
   }
+  message ViewRequest {
+    int32 persistentRefIndex = 1;
+    string title = 2;
+    ValueInfo value = 3;
+  }
   oneof event {
     google.protobuf.Empty busy = 1;
     CommandOutput text = 2;
     RequestReadLn requestReadLn = 3;
     Prompt prompt = 4;
     google.protobuf.Empty termination = 5;
+    ViewRequest viewRequest = 6;
   }
 }
 
