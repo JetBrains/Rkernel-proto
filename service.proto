@@ -274,6 +274,7 @@ message TableColumnsInfoRequest {
   enum TableType {
     DPLYR = 0;
     DATA_TABLE = 1;
+    DATA_FRAME = 2;
   }
   RRef ref = 1;
   TableType tableType = 2;
