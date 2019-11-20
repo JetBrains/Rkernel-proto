@@ -43,6 +43,7 @@ service RPIService {
   // Repo utils service points
   rpc repoGetPackageVersion(google.protobuf.StringValue) returns (stream CommandOutput) {}
   rpc repoInstallPackage(RepoInstallPackageRequest) returns (google.protobuf.Empty) {}
+  rpc repoAddLibraryPath(google.protobuf.StringValue) returns (stream CommandOutput) {}
   rpc repoCheckPackageInstalled(google.protobuf.StringValue) returns (stream CommandOutput) {}
   rpc repoRemovePackage(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
 
