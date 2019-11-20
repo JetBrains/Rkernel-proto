@@ -240,20 +240,20 @@ message GraphicsInstallRequest {
   string packageType = 3;
 }
 
+message ScreenParameters {
+  int32 width = 1;
+  int32 height = 2;
+  int32 resolution = 3;
+}
+
 message GraphicsInitRequest {
-  message ScreenParameters {
-    int32 width = 1;
-    int32 height = 2;
-    int32 resolution = 3;
-  }
   string snapshotDirectory = 1;
   ScreenParameters screenParameters = 2;
 }
 
 message GraphicsRescaleRequest {
   int32 snapshotNumber = 1;
-  double newWidth = 2;
-  double newHeight = 3;
+  ScreenParameters newParameters = 2;
 }
 
 message ChunkParameters {
