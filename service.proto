@@ -30,7 +30,7 @@ service RPIService {
   rpc graphicsInit(GraphicsInitRequest) returns (stream CommandOutput) {}
   rpc graphicsDump(google.protobuf.Empty) returns (stream CommandOutput) {}
   rpc graphicsRescale(GraphicsRescaleRequest) returns (stream CommandOutput) {}
-  rpc graphicsReset(google.protobuf.Empty) returns (stream CommandOutput) {}
+  rpc graphicsShutdown(google.protobuf.Empty) returns (stream CommandOutput) {}
 
   // HTML viewer service points
   rpc htmlViewerInit(google.protobuf.StringValue) returns (stream CommandOutput) {}
