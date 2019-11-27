@@ -30,6 +30,7 @@ service RPIService {
   rpc graphicsInit(GraphicsInitRequest) returns (stream CommandOutput) {}
   rpc graphicsDump(google.protobuf.Empty) returns (stream CommandOutput) {}
   rpc graphicsRescale(GraphicsRescaleRequest) returns (stream CommandOutput) {}
+  rpc graphicsRescaleStored(GraphicsRescaleStoredRequest) returns (stream CommandOutput) {}
   rpc graphicsShutdown(google.protobuf.Empty) returns (stream CommandOutput) {}
 
   // HTML viewer service points
@@ -249,11 +250,19 @@ message ScreenParameters {
 message GraphicsInitRequest {
   string snapshotDirectory = 1;
   ScreenParameters screenParameters = 2;
+  bool inMemory = 3;
 }
 
 message GraphicsRescaleRequest {
   int32 snapshotNumber = 1;
   ScreenParameters newParameters = 2;
+}
+
+message GraphicsRescaleStoredRequest {
+  string parentDirectory = 1;
+  int32 snapshotNumber = 2;
+  int32 snapshotVersion = 3;
+  ScreenParameters newParameters = 4;
 }
 
 message ChunkParameters {
