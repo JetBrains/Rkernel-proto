@@ -19,9 +19,21 @@ service RPIService {
 
   rpc executeCode(ExecuteCodeRequest) returns (stream ExecuteCodeResponse) {}
   rpc sendReadLn(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
-  rpc sendDebuggerCommand(DebuggerCommandRequest) returns (google.protobuf.Empty) {}
   rpc replInterrupt(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc getNextAsyncEvent(google.protobuf.Empty) returns (AsyncEvent) {}
+
+  // Debugger
+  rpc debugAddBreakpoint(DebugAddBreakpointRequest) returns (google.protobuf.Empty) {}
+  rpc debugRemoveBreakpoint(SourcePosition) returns (google.protobuf.Empty) {}
+  rpc debugCommandContinue(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc debugCommandPause(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc debugCommandStop(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc debugCommandStepOver(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc debugCommandStepInto(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc debugCommandForceStepInto(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc debugCommandStepOut(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc debugCommandRunToPosition(SourcePosition) returns (google.protobuf.Empty) {}
+  rpc debugMuteBreakpoints(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
 
   // Graphics device service points
   rpc graphicsInit(GraphicsInitRequest) returns (stream CommandOutput) {}
@@ -46,7 +58,7 @@ service RPIService {
   rpc repoRemovePackage(RepoRemovePackageRequest) returns (google.protobuf.Empty) {}
 
   // Methods for RRef and RVariableLoader
-  rpc copyToPersistentRef(RRef) returns (google.protobuf.Int32Value) {}
+  rpc copyToPersistentRef(RRef) returns (CopyToPersistentRefResponse) {}
   rpc disposePersistentRefs(PersistentRefList) returns (google.protobuf.Empty) {}
   rpc loaderGetParentEnvs(RRef) returns (ParentEnvsResponse) {}
   rpc loaderGetVariables(GetVariablesRequest) returns (VariablesResponse) {}
@@ -55,10 +67,15 @@ service RPIService {
   rpc evaluateAsText(RRef) returns (google.protobuf.StringValue) {}
   rpc evaluateAsBoolean(RRef) returns (google.protobuf.BoolValue) {}
   rpc evaluateAsStringList(RRef) returns (StringList) {}
+  rpc getFunctionSourcePosition(RRef) returns (SourcePosition) {}
+  rpc getSourceFileText(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
+  rpc getSourceFileName(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
   rpc loadObjectNames(RRef) returns (StringList) {}
   rpc findAllNamedArguments(RRef) returns (StringList) {}
   rpc getTableColumnsInfo(TableColumnsInfoRequest) returns (TableColumnsInfo) {}
   rpc getFormalArguments(RRef) returns (StringList) {}
+  rpc getEqualityObject(RRef) returns (google.protobuf.Int64Value) {}
+
   rpc getRMarkdownChunkOptions(google.protobuf.Empty) returns (StringList) {}
 
   // Data frame viewer
@@ -68,11 +85,6 @@ service RPIService {
   rpc dataFrameSort(DataFrameSortRequest) returns (google.protobuf.Int32Value) {}
   rpc dataFrameFilter(DataFrameFilterRequest) returns (google.protobuf.Int32Value) {}
   rpc dataFrameDispose(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
-
-  // Debugging
-  rpc updateSysFrames(google.protobuf.Empty) returns (google.protobuf.Int32Value) {}
-  rpc debugWhere(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
-  rpc debugGetSysFunctionCode(google.protobuf.Int32Value) returns (google.protobuf.StringValue) {}
 
   // Documentation
   rpc convertRd2HTML(ConvertRd2HTMLRequest) returns (stream CommandOutput) {}
@@ -100,10 +112,12 @@ message GetInfoResponse {
 
 message ExecuteCodeRequest {
   string code = 1;
-  string debugFileId = 2;
-  bool withEcho = 3;
-  bool streamOutput = 4;
-  bool isRepl = 5;
+  string sourceFileId = 2;
+  int32 sourceFileLineOffset = 3;
+  bool withEcho = 4;
+  bool streamOutput = 5;
+  bool isRepl = 6;
+  bool isDebug = 7;
 }
 
 message CommandOutput {
@@ -122,26 +136,55 @@ message ExecuteCodeResponse {
   }
 }
 
+message StackFrame {
+  SourcePosition position = 1;
+  string functionName = 2;
+  int64 equalityObject = 3;
+}
+
+message StackFrameList {
+  repeated StackFrame frames = 1;
+}
+
 message AsyncEvent {
-  message Prompt {
-    bool isDebug = 1;
-  }
   message RequestReadLn {
     string prompt = 1;
+  }
+  message DebugPrompt {
+    bool changed = 1;
+    StackFrameList stack = 2;
   }
   message ViewRequest {
     int32 persistentRefIndex = 1;
     string title = 2;
     ValueInfo value = 3;
   }
+  message Exception {
+    string text = 1;
+    StackFrameList stack = 2;
+  }
   oneof event {
     google.protobuf.Empty busy = 1;
     CommandOutput text = 2;
     RequestReadLn requestReadLn = 3;
-    Prompt prompt = 4;
-    ViewRequest viewRequest = 5;
-    google.protobuf.Empty termination = 6;
+    google.protobuf.Empty prompt = 4;
+    DebugPrompt debugPrompt = 5;
+    ViewRequest viewRequest = 6;
+    Exception exception = 7;
+    google.protobuf.Empty termination = 8;
   }
+}
+
+message SourcePosition {
+  string fileId = 1;
+  int32 line = 2;
+}
+
+message DebugAddBreakpointRequest {
+  SourcePosition position = 1;
+  bool suspend = 2;
+  string evaluateAndLog = 3;
+  string condition = 4;
 }
 
 message RRef {
@@ -170,6 +213,14 @@ message RRef {
     ParentEnv parentEnv = 6;
     Expression expression = 7;
     ListElement listElement = 8;
+    int32 errorStackSysFrameIndex = 9;
+  }
+}
+
+message CopyToPersistentRefResponse {
+  oneof response {
+    int32 persistentIndex = 1;
+    string error = 2;
   }
 }
 
@@ -217,7 +268,7 @@ message ValueInfo {
     int32 cols = 2;
   }
   message Function {
-    string code = 1;
+    string header = 1;
   }
   message Environment {
     string name = 1;
@@ -394,23 +445,6 @@ message DataFrameFilterRequest {
   }
   RRef ref = 1;
   Filter filter = 2;
-}
-
-message DebugExecuteRequest {
-  string code = 1;
-  string fileId = 2;
-}
-
-enum DebuggerCommand {
-  NEXT = 0;
-  STEP = 1;
-  CONTINUE = 2;
-  FINISH = 3;
-  QUIT = 4;
-}
-
-message DebuggerCommandRequest {
-  DebuggerCommand command = 1;
 }
 
 message ConvertRd2HTMLRequest {
