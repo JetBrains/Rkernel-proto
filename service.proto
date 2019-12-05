@@ -46,7 +46,7 @@ service RPIService {
   rpc repoInstallPackage(RepoInstallPackageRequest) returns (google.protobuf.Empty) {}
   rpc repoAddLibraryPath(google.protobuf.StringValue) returns (stream CommandOutput) {}
   rpc repoCheckPackageInstalled(google.protobuf.StringValue) returns (stream CommandOutput) {}
-  rpc repoRemovePackage(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc repoRemovePackage(RepoRemovePackageRequest) returns (google.protobuf.Empty) {}
 
   // Methods for RRef and RVariableLoader
   rpc copyToPersistentRef(RRef) returns (google.protobuf.Int32Value) {}
@@ -277,6 +277,11 @@ message ChunkParameters {
 message RepoInstallPackageRequest {
   string packageName = 1;
   map<string, string> arguments = 2;
+}
+
+message RepoRemovePackageRequest {
+  string packageName = 1;
+  string libraryPath = 2;
 }
 
 message TableColumnsInfoRequest {
