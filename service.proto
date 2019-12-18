@@ -17,14 +17,11 @@ service RPIService {
   rpc init(Init) returns (stream CommandOutput) {}
   rpc quit(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 
-  rpc executeCode(ExecuteCodeRequest) returns (stream CommandOutput) {}
-  rpc sourceFile(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
-
-  rpc replExecute(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
-  rpc replSendReadLn(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
-  rpc replSendDebuggerCommand(DebuggerCommandRequest) returns (google.protobuf.Empty) {}
+  rpc executeCode(ExecuteCodeRequest) returns (stream ExecuteCodeResponse) {}
+  rpc sendReadLn(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc sendDebuggerCommand(DebuggerCommandRequest) returns (google.protobuf.Empty) {}
   rpc replInterrupt(google.protobuf.Empty) returns (google.protobuf.Empty) {}
-  rpc replGetNextEvent(google.protobuf.Empty) returns (ReplEvent) {}
+  rpc getNextAsyncEvent(google.protobuf.Empty) returns (AsyncEvent) {}
 
   // Graphics device service points
   rpc graphicsInit(GraphicsInitRequest) returns (stream CommandOutput) {}
@@ -76,7 +73,6 @@ service RPIService {
   rpc updateSysFrames(google.protobuf.Empty) returns (google.protobuf.Int32Value) {}
   rpc debugWhere(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
   rpc debugGetSysFunctionCode(google.protobuf.Int32Value) returns (google.protobuf.StringValue) {}
-  rpc debugExecute(DebugExecuteRequest) returns (google.protobuf.Empty) {}
 
   // Documentation
   rpc convertRd2HTML(ConvertRd2HTMLRequest) returns (stream CommandOutput) {}
@@ -104,7 +100,10 @@ message GetInfoResponse {
 
 message ExecuteCodeRequest {
   string code = 1;
-  bool withEcho = 2;
+  string debugFileId = 2;
+  bool withEcho = 3;
+  bool streamOutput = 4;
+  bool isRepl = 5;
 }
 
 message CommandOutput {
@@ -116,12 +115,19 @@ message CommandOutput {
   bytes text = 2;
 }
 
-message ReplEvent {
-  message RequestReadLn {
-    string prompt = 1;
+message ExecuteCodeResponse {
+  oneof msg {
+    CommandOutput output = 1;
+    string exception = 2;
   }
+}
+
+message AsyncEvent {
   message Prompt {
     bool isDebug = 1;
+  }
+  message RequestReadLn {
+    string prompt = 1;
   }
   message ViewRequest {
     int32 persistentRefIndex = 1;
@@ -133,8 +139,7 @@ message ReplEvent {
     CommandOutput text = 2;
     RequestReadLn requestReadLn = 3;
     Prompt prompt = 4;
-    google.protobuf.Empty termination = 5;
-    ViewRequest viewRequest = 6;
+    ViewRequest viewRequest = 5;
   }
 }
 
