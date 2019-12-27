@@ -19,6 +19,7 @@ service RPIService {
 
   rpc executeCode(ExecuteCodeRequest) returns (stream ExecuteCodeResponse) {}
   rpc sendReadLn(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc sendEof(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc replInterrupt(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc getNextAsyncEvent(google.protobuf.Empty) returns (AsyncEvent) {}
 
@@ -180,6 +181,7 @@ message AsyncEvent {
     ViewRequest viewRequest = 8;
     ShowFileRequest showFileRequest = 9;
     ShowHelpRequest showHelpRequest = 10;
+    google.protobuf.Empty subprocessInput = 11;
   }
 }
 
