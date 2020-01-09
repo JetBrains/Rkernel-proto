@@ -140,6 +140,7 @@ message AsyncEvent {
     RequestReadLn requestReadLn = 3;
     Prompt prompt = 4;
     ViewRequest viewRequest = 5;
+    google.protobuf.Empty termination = 6;
   }
 }
 
