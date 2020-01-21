@@ -66,7 +66,7 @@ service RPIService {
   rpc loaderGetValueInfo(RRef) returns (ValueInfo) {}
   rpc evaluateAsText(RRef) returns (google.protobuf.StringValue) {}
   rpc evaluateAsBoolean(RRef) returns (google.protobuf.BoolValue) {}
-  rpc evaluateAsStringList(RRef) returns (StringList) {}
+  rpc getDistinctStrings(RRef) returns (StringList) {}
   rpc getFunctionSourcePosition(RRef) returns (SourcePosition) {}
   rpc getSourceFileText(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
   rpc getSourceFileName(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
