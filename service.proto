@@ -343,21 +343,22 @@ message RepoRemovePackageRequest {
 }
 
 message TableColumnsInfoRequest {
-  enum TableType {
-    DPLYR = 0;
-    DATA_TABLE = 1;
-    DATA_FRAME = 2;
-  }
   RRef ref = 1;
-  TableType tableType = 2;
 }
 
 message TableColumnsInfo {
+  enum TableType {
+    UNKNOWN = 0;
+    DPLYR = 1;
+    DATA_TABLE = 2;
+    DATA_FRAME = 3;
+  }
   message Column {
     string name = 1;
     string type = 2;
   }
   repeated Column columns = 1;
+  TableType tableType = 2;
 }
 
 message DataFrameInfoResponse {
