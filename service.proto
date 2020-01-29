@@ -42,10 +42,6 @@ service RPIService {
   rpc graphicsRescaleStored(GraphicsRescaleStoredRequest) returns (stream CommandOutput) {}
   rpc graphicsShutdown(google.protobuf.Empty) returns (stream CommandOutput) {}
 
-  // HTML viewer service points
-  rpc htmlViewerInit(google.protobuf.StringValue) returns (stream CommandOutput) {}
-  rpc htmlViewerReset(google.protobuf.Empty) returns (stream CommandOutput) {}
-
   // RMarkdown chunks
   rpc beforeChunkExecution(ChunkParameters) returns (stream CommandOutput) {}
   rpc afterChunkExecution(google.protobuf.Empty) returns (stream CommandOutput) {}
@@ -91,6 +87,7 @@ service RPIService {
   rpc makeRdFromRoxygen(MakeRdFromRoxygenRequest) returns (stream CommandOutput) {}
   rpc findPackagePathByTopic(FindPackagePathByTopicRequest) returns (stream CommandOutput) {}
   rpc findPackagePathByPackageName(FindPackagePathByPackageNameRequest) returns (stream CommandOutput) {}
+  rpc httpdRequest(google.protobuf.StringValue) returns (HttpdResponse) {}
 
   // Misc
   rpc getWorkingDir(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
@@ -99,7 +96,7 @@ service RPIService {
   rpc loadLibrary(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
   rpc unloadLibrary(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
   rpc setOutputWidth(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
-  rpc viewRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc clientRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
 
 message Init {
@@ -164,15 +161,25 @@ message AsyncEvent {
     string text = 1;
     StackFrameList stack = 2;
   }
+  message ShowFileRequest {
+    string filePath = 1;
+    string title = 2;
+  }
+  message ShowHelpRequest {
+    string content = 1;
+    string url = 2;
+  }
   oneof event {
     google.protobuf.Empty busy = 1;
     CommandOutput text = 2;
     RequestReadLn requestReadLn = 3;
     google.protobuf.Empty prompt = 4;
     DebugPrompt debugPrompt = 5;
-    ViewRequest viewRequest = 6;
+    google.protobuf.Empty termination = 6;
     Exception exception = 7;
-    google.protobuf.Empty termination = 8;
+    ViewRequest viewRequest = 8;
+    ShowFileRequest showFileRequest = 9;
+    ShowHelpRequest showHelpRequest = 10;
   }
 }
 
@@ -475,4 +482,10 @@ message FindPackagePathByTopicRequest {
 
 message FindPackagePathByPackageNameRequest {
   string packageName = 1;
+}
+
+message HttpdResponse {
+  bool success = 1;
+  bytes content = 2;
+  string url = 3;
 }
