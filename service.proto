@@ -16,6 +16,7 @@ service RPIService {
 
   rpc init(Init) returns (stream CommandOutput) {}
   rpc quit(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc quitProceed(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 
   rpc executeCode(ExecuteCodeRequest) returns (stream ExecuteCodeResponse) {}
   rpc sendReadLn(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
