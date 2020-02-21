@@ -100,6 +100,7 @@ service RPIService {
   rpc unloadLibrary(UnloadLibraryRequest) returns (google.protobuf.Empty) {}
   rpc setOutputWidth(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
   rpc clientRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc setSaveOnExit(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
 }
 
 message Init {
@@ -109,6 +110,8 @@ message Init {
 
 message GetInfoResponse {
   string rVersion = 1;
+  string workspaceFile = 2;
+  bool saveOnExit = 3;
 }
 
 message ExecuteCodeRequest {
