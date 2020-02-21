@@ -97,7 +97,7 @@ service RPIService {
   rpc setWorkingDir(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
   rpc clearEnvironment(RRef) returns (google.protobuf.Empty) {}
   rpc loadLibrary(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
-  rpc unloadLibrary(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc unloadLibrary(UnloadLibraryRequest) returns (google.protobuf.Empty) {}
   rpc setOutputWidth(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
   rpc clientRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
@@ -486,6 +486,11 @@ message FindPackagePathByTopicRequest {
 
 message FindPackagePathByPackageNameRequest {
   string packageName = 1;
+}
+
+message UnloadLibraryRequest {
+  string packageName = 1;
+  bool withDynamicLibrary = 2;
 }
 
 message HttpdResponse {
