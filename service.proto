@@ -130,6 +130,14 @@ message CommandOutput {
   bytes text = 2;
 }
 
+message ExceptionInfo {
+  string message = 1;
+  oneof details {
+    google.protobuf.Empty simpleError = 2;
+    google.protobuf.Empty interrupted = 3;
+  }
+}
+
 message ExecuteCodeResponse {
   oneof msg {
     CommandOutput output = 1;
@@ -161,7 +169,7 @@ message AsyncEvent {
     ValueInfo value = 3;
   }
   message Exception {
-    string text = 1;
+    ExceptionInfo exception = 1;
     StackFrameList stack = 2;
   }
   message ShowFileRequest {
