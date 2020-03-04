@@ -135,6 +135,7 @@ message ExceptionInfo {
   oneof details {
     google.protobuf.Empty simpleError = 2;
     google.protobuf.Empty interrupted = 3;
+    string packageNotFound = 4;
   }
 }
 
