@@ -119,6 +119,7 @@ message ExecuteCodeRequest {
   bool streamOutput = 5;
   bool isRepl = 6;
   bool isDebug = 7;
+  bool resetDebugCommand = 8;
 }
 
 message CommandOutput {
