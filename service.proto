@@ -141,10 +141,11 @@ message CommandOutput {
 
 message ExceptionInfo {
   string message = 1;
+  string call = 2;
   oneof details {
-    google.protobuf.Empty simpleError = 2;
-    google.protobuf.Empty interrupted = 3;
-    string packageNotFound = 4;
+    google.protobuf.Empty simpleError = 3;
+    google.protobuf.Empty interrupted = 4;
+    string packageNotFound = 5;
   }
 }
 
