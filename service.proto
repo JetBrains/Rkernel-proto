@@ -235,7 +235,7 @@ message RRef {
   }
   message ListElement {
     RRef list = 1;
-    int32 index = 2;
+    int64 index = 2;
   }
   oneof ref {
     int32 persistentIndex = 1;
@@ -270,8 +270,8 @@ message ParentEnvsResponse {
 
 message GetVariablesRequest {
   RRef obj = 1;
-  int32 start = 2;
-  int32 end = 3;
+  int64 start = 2;
+  int64 end = 3;
 }
 
 message VariablesResponse {
@@ -280,7 +280,7 @@ message VariablesResponse {
     ValueInfo value = 2;
   }
   bool isEnv = 1;
-  int32 totalCount = 2;
+  int64 totalCount = 2;
   repeated Variable vars = 3;
 }
 
@@ -294,7 +294,7 @@ message ValueInfo {
     bool isVector = 3;
   }
   message List {
-    int32 length = 1;
+    int64 length = 1;
   }
   message DataFrame {
     int32 rows = 1;
