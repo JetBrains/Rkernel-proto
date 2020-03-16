@@ -128,6 +128,7 @@ message ExecuteCodeRequest {
   bool isRepl = 6;
   bool isDebug = 7;
   DebugCommand firstDebugCommand = 8;
+  bool setLastValue = 9;
 }
 
 message CommandOutput {
