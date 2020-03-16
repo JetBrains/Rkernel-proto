@@ -74,6 +74,7 @@ service RPIService {
   rpc getFormalArguments(RRef) returns (StringList) {}
   rpc getEqualityObject(RRef) returns (google.protobuf.Int64Value) {}
   rpc setValue(SetValueRequest) returns (SetValueResponse) {}
+  rpc getObjectSizes(RRefList) returns (Int64List) {}
 
   rpc getRMarkdownChunkOptions(google.protobuf.Empty) returns (StringList) {}
 
@@ -308,15 +309,16 @@ message ValueInfo {
   message Error {
     string text = 1;
   }
+  repeated string cls = 1;
   oneof info {
-    Unevaluated unevaluated = 1;
-    Value value = 2;
-    List list = 3;
-    DataFrame dataFrame = 4;
-    Function function = 5;
-    Environment environment = 6;
-    google.protobuf.Empty graph = 7;
-    Error error = 8;
+    Unevaluated unevaluated = 2;
+    Value value = 3;
+    List list = 4;
+    DataFrame dataFrame = 5;
+    Function function = 6;
+    Environment environment = 7;
+    google.protobuf.Empty graph = 8;
+    Error error = 9;
   }
 }
 
@@ -529,4 +531,12 @@ message SetValueResponse {
     google.protobuf.Empty ok = 1;
     string error = 2;
   }
+}
+
+message RRefList {
+  repeated RRef refs = 1;
+}
+
+message Int64List {
+  repeated int64 list = 1;
 }
