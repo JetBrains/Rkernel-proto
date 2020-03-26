@@ -247,6 +247,7 @@ message RRef {
     Expression expression = 7;
     ListElement listElement = 8;
     int32 errorStackSysFrameIndex = 9;
+    RRef attributes = 10;
   }
 }
 
@@ -292,6 +293,7 @@ message ValueInfo {
     string textValue = 1;
     bool isComplete = 2;
     bool isVector = 3;
+    bool isS4 = 4;
   }
   message List {
     int64 length = 1;
