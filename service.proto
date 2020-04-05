@@ -107,12 +107,14 @@ service RPIService {
 message Init {
   string projectDir = 1;
   string rScriptsPath = 2;
+
+  string workspaceFile = 3;
+  bool loadWorkspace = 4;
+  bool saveOnExit = 5;
 }
 
 message GetInfoResponse {
   string rVersion = 1;
-  string workspaceFile = 2;
-  bool saveOnExit = 3;
 }
 
 message ExecuteCodeRequest {
