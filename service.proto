@@ -313,6 +313,9 @@ message ValueInfo {
   message Error {
     string text = 1;
   }
+  message Matrix {
+    repeated int32 dim = 1;
+  }
   repeated string cls = 1;
   oneof info {
     Unevaluated unevaluated = 2;
@@ -323,6 +326,7 @@ message ValueInfo {
     Environment environment = 7;
     google.protobuf.Empty graph = 8;
     Error error = 9;
+    Matrix matrix = 10;
   }
 }
 
