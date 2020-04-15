@@ -62,7 +62,7 @@ service RPIService {
   rpc loaderGetVariables(GetVariablesRequest) returns (VariablesResponse) {}
   rpc loaderGetLoadedNamespaces(google.protobuf.Empty) returns (StringList) {}
   rpc loaderGetValueInfo(RRef) returns (ValueInfo) {}
-  rpc evaluateAsText(RRef) returns (google.protobuf.StringValue) {}
+  rpc evaluateAsText(RRef) returns (StringOrError) {}
   rpc evaluateAsBoolean(RRef) returns (google.protobuf.BoolValue) {}
   rpc getDistinctStrings(RRef) returns (StringList) {}
   rpc getFunctionSourcePosition(RRef) returns (SourcePosition) {}
@@ -548,4 +548,11 @@ message RRefList {
 
 message Int64List {
   repeated int64 list = 1;
+}
+
+message StringOrError {
+  oneof result {
+    string value = 1;
+    string error = 2;
+  }
 }
