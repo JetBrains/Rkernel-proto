@@ -275,6 +275,10 @@ message GetVariablesRequest {
   RRef obj = 1;
   int64 start = 2;
   int64 end = 3;
+  // These parameters are for environments only
+  bool noHidden = 4;
+  bool noFunctions = 5;
+  bool onlyFunctions = 6;
 }
 
 message VariablesResponse {
