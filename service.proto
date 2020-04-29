@@ -55,6 +55,10 @@ service RPIService {
   rpc repoCheckPackageInstalled(google.protobuf.StringValue) returns (stream CommandOutput) {}
   rpc repoRemovePackage(RepoRemovePackageRequest) returns (google.protobuf.Empty) {}
 
+  // Dataset import service points
+  rpc previewDataImport(PreviewDataImportRequest) returns (stream CommandOutput) {}
+  rpc commitDataImport(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+
   // Methods for RRef and RVariableLoader
   rpc copyToPersistentRef(RRef) returns (CopyToPersistentRefResponse) {}
   rpc disposePersistentRefs(PersistentRefList) returns (google.protobuf.Empty) {}
@@ -386,6 +390,10 @@ message RepoInstallPackageRequest {
 message RepoRemovePackageRequest {
   string packageName = 1;
   string libraryPath = 2;
+}
+
+message PreviewDataImportRequest {
+  map<string, string> options = 1;
 }
 
 message TableColumnsInfoRequest {
