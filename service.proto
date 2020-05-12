@@ -57,7 +57,7 @@ service RPIService {
 
   // Dataset import service points
   rpc previewDataImport(PreviewDataImportRequest) returns (stream CommandOutput) {}
-  rpc commitDataImport(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc commitDataImport(CommitDataImportRequest) returns (google.protobuf.Empty) {}
 
   // Methods for RRef and RVariableLoader
   rpc copyToPersistentRef(RRef) returns (CopyToPersistentRefResponse) {}
@@ -393,7 +393,17 @@ message RepoRemovePackageRequest {
 }
 
 message PreviewDataImportRequest {
-  map<string, string> options = 1;
+  string path = 1;
+  string mode = 2;
+  int32 rowCount = 3;
+  map<string, string> options = 4;
+}
+
+message CommitDataImportRequest {
+  string name = 1;
+  string path = 2;
+  string mode = 3;
+  map<string, string> options = 4;
 }
 
 message TableColumnsInfoRequest {
