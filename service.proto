@@ -106,6 +106,7 @@ service RPIService {
   rpc setOutputWidth(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
   rpc clientRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc setSaveOnExit(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
+  rpc raiseSigsegv(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
 
 message Init {
