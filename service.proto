@@ -103,6 +103,8 @@ service RPIService {
   rpc clearEnvironment(RRef) returns (google.protobuf.Empty) {}
   rpc loadLibrary(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
   rpc unloadLibrary(UnloadLibraryRequest) returns (google.protobuf.Empty) {}
+  rpc saveGlobalEnvironment(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+  rpc loadEnvironment(LoadEnvironmentRequest) returns (google.protobuf.Empty) {}
   rpc setOutputWidth(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
   rpc clientRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc setSaveOnExit(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
@@ -563,6 +565,12 @@ message SetValueResponse {
     google.protobuf.Empty ok = 1;
     string error = 2;
   }
+}
+
+message LoadEnvironmentRequest {
+  string file = 1;
+  // empty variable name means load into global env
+  string variable = 2;
 }
 
 message RRefList {
