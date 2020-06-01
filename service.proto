@@ -74,6 +74,7 @@ service RPIService {
   rpc getSourceFileName(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
   rpc loadObjectNames(RRef) returns (StringList) {}
   rpc findInheritorNamedArguments(RRef) returns (StringList) {}
+  rpc findDotsNamedArguments(RRef) returns (DotsNamedArguments) {}
   rpc getTableColumnsInfo(TableColumnsInfoRequest) returns (TableColumnsInfo) {}
   rpc getFormalArguments(RRef) returns (StringList) {}
   rpc getEqualityObject(RRef) returns (google.protobuf.Int64Value) {}
@@ -586,4 +587,9 @@ message StringOrError {
     string value = 1;
     string error = 2;
   }
+}
+
+message DotsNamedArguments {
+  repeated string argNames = 1;
+  repeated string funArgNames = 2;
 }
