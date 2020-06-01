@@ -73,7 +73,7 @@ service RPIService {
   rpc getSourceFileText(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
   rpc getSourceFileName(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
   rpc loadObjectNames(RRef) returns (StringList) {}
-  rpc findAllNamedArguments(RRef) returns (StringList) {}
+  rpc findInheritorNamedArguments(RRef) returns (StringList) {}
   rpc getTableColumnsInfo(TableColumnsInfoRequest) returns (TableColumnsInfo) {}
   rpc getFormalArguments(RRef) returns (StringList) {}
   rpc getEqualityObject(RRef) returns (google.protobuf.Int64Value) {}
