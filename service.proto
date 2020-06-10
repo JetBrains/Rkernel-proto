@@ -198,6 +198,7 @@ message AsyncEvent {
   message ShowFileRequest {
     string filePath = 1;
     string title = 2;
+    bytes content = 3;
   }
   message ShowHelpRequest {
     string content = 1;
