@@ -223,6 +223,7 @@ message AsyncEvent {
     ShowFileRequest showFileRequest = 9;
     ShowHelpRequest showHelpRequest = 10;
     google.protobuf.Empty subprocessInput = 11;
+    string browseURLRequest = 12;
   }
 }
 
