@@ -43,6 +43,11 @@ service RPIService {
   rpc graphicsDump(google.protobuf.Empty) returns (stream CommandOutput) {}
   rpc graphicsRescale(GraphicsRescaleRequest) returns (stream CommandOutput) {}
   rpc graphicsRescaleStored(GraphicsRescaleStoredRequest) returns (stream CommandOutput) {}
+  rpc graphicsPullChangedNumbers(google.protobuf.Empty) returns (Int32List) {}
+  rpc graphicsPullSnapshot(GraphicsPullSnapshotRequest) returns (GraphicsPullSnapshotResponse) {}
+  rpc graphicsPushSnapshot(GraphicsPushSnapshotRequest) returns (google.protobuf.StringValue) {}
+  rpc graphicsCreateGroup(google.protobuf.Empty) returns (stream CommandOutput) {}
+  rpc graphicsRemoveGroup(google.protobuf.StringValue) returns (stream CommandOutput) {}
   rpc graphicsShutdown(google.protobuf.Empty) returns (stream CommandOutput) {}
 
   // RMarkdown chunks
@@ -347,6 +352,11 @@ message StringList {
   repeated string list = 1;
 }
 
+message Int32List {
+  string message = 1;
+  repeated int32 value = 2;
+}
+
 message GraphicsInstallRequest {
   string packagePath = 1;
   string libraryPath = 2;
@@ -360,9 +370,8 @@ message ScreenParameters {
 }
 
 message GraphicsInitRequest {
-  string snapshotDirectory = 1;
-  ScreenParameters screenParameters = 2;
-  bool inMemory = 3;
+  ScreenParameters screenParameters = 1;
+  bool inMemory = 2;
 }
 
 message GraphicsRescaleRequest {
@@ -371,10 +380,29 @@ message GraphicsRescaleRequest {
 }
 
 message GraphicsRescaleStoredRequest {
-  string parentDirectory = 1;
+  string groupId = 1;
   int32 snapshotNumber = 2;
   int32 snapshotVersion = 3;
   ScreenParameters newParameters = 4;
+}
+
+message GraphicsPullSnapshotRequest {
+  string groupId = 1;
+  int32 snapshotNumber = 2;
+  bool withRecorded = 3;
+}
+
+message GraphicsPullSnapshotResponse {
+  string message = 1;
+  string snapshotName = 2;
+  bytes content = 3;
+  bytes recorded = 4;
+}
+
+message GraphicsPushSnapshotRequest {
+  string groupId = 1;
+  int32 snapshotNumber = 2;
+  bytes recorded = 3;
 }
 
 message ChunkParameters {
