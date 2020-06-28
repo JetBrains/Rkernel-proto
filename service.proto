@@ -102,9 +102,9 @@ service RPIService {
   // Documentation
   rpc convertRd2HTML(ConvertRd2HTMLRequest) returns (stream CommandOutput) {}
   rpc makeRdFromRoxygen(MakeRdFromRoxygenRequest) returns (stream CommandOutput) {}
-  rpc findPackagePathByTopic(FindPackagePathByTopicRequest) returns (stream CommandOutput) {}
-  rpc findPackagePathByPackageName(FindPackagePathByPackageNameRequest) returns (stream CommandOutput) {}
   rpc httpdRequest(google.protobuf.StringValue) returns (HttpdResponse) {}
+  rpc getDocumentationForPackage(google.protobuf.StringValue) returns (HttpdResponse) {}
+  rpc getDocumentationForSymbol(DocumentationForSymbolRequest) returns (HttpdResponse) {}
 
   // Misc
   rpc getWorkingDir(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
@@ -207,10 +207,6 @@ message AsyncEvent {
     string title = 2;
     bytes content = 3;
   }
-  message ShowHelpRequest {
-    string content = 1;
-    string url = 2;
-  }
   oneof event {
     google.protobuf.Empty busy = 1;
     CommandOutput text = 2;
@@ -221,7 +217,7 @@ message AsyncEvent {
     Exception exception = 7;
     ViewRequest viewRequest = 8;
     ShowFileRequest showFileRequest = 9;
-    ShowHelpRequest showHelpRequest = 10;
+    HttpdResponse showHelpRequest = 10;
     google.protobuf.Empty subprocessInput = 11;
     string browseURLRequest = 12;
   }
@@ -569,15 +565,6 @@ message MakeRdFromRoxygenRequest {
   string outputFilePath = 3;
 }
 
-message FindPackagePathByTopicRequest {
-  string topic = 1;
-  string searchSpace = 2;
-}
-
-message FindPackagePathByPackageNameRequest {
-  string packageName = 1;
-}
-
 message UnloadLibraryRequest {
   string packageName = 1;
   bool withDynamicLibrary = 2;
@@ -585,8 +572,13 @@ message UnloadLibraryRequest {
 
 message HttpdResponse {
   bool success = 1;
-  bytes content = 2;
+  string content = 2;
   string url = 3;
+}
+
+message DocumentationForSymbolRequest {
+  string symbol = 1;
+  string package = 2;
 }
 
 message SetValueRequest {
