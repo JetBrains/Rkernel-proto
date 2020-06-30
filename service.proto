@@ -100,8 +100,7 @@ service RPIService {
   rpc dataFrameDispose(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
 
   // Documentation
-  rpc convertRd2HTML(ConvertRd2HTMLRequest) returns (stream CommandOutput) {}
-  rpc makeRdFromRoxygen(MakeRdFromRoxygenRequest) returns (stream CommandOutput) {}
+  rpc convertRoxygenToHTML(ConvertRoxygenToHTMLRequest) returns (ConvertRoxygenToHTMLResponse) {}
   rpc httpdRequest(google.protobuf.StringValue) returns (HttpdResponse) {}
   rpc getDocumentationForPackage(google.protobuf.StringValue) returns (HttpdResponse) {}
   rpc getDocumentationForSymbol(DocumentationForSymbolRequest) returns (HttpdResponse) {}
@@ -546,23 +545,16 @@ message DataFrameFilterRequest {
   Filter filter = 2;
 }
 
-message ConvertRd2HTMLRequest {
-  message DBRequest {
-    string dbPath = 1;
-    string dbPage = 2;
-  }
-  oneof rdSource {
-    string rdFilePath = 1;
-    DBRequest dbRequest = 2;
-  }
-  string outputFilePath = 3;
-  string topicPackage = 4;
-}
-
-message MakeRdFromRoxygenRequest {
+message ConvertRoxygenToHTMLRequest {
   string functionName = 1;
   string functionText = 2;
-  string outputFilePath = 3;
+}
+
+message ConvertRoxygenToHTMLResponse {
+  oneof result {
+    string text = 1;
+    string error = 2;
+  }
 }
 
 message UnloadLibraryRequest {
