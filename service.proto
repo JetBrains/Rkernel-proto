@@ -409,9 +409,6 @@ message ChunkParameters {
   string rmarkdownParameters = 1;
   string chunkText = 2;
   string outputDirectory = 3;
-  int32 width = 4;
-  int32 height = 5;
-  int32 resolution = 6;
 }
 
 message RepoInstallPackageRequest {
