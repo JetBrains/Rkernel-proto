@@ -53,6 +53,8 @@ service RPIService {
   // RMarkdown chunks
   rpc beforeChunkExecution(ChunkParameters) returns (stream CommandOutput) {}
   rpc afterChunkExecution(google.protobuf.Empty) returns (stream CommandOutput) {}
+  rpc pullChunkOutputRelativePaths(google.protobuf.Empty) returns (StringList) {}
+  rpc pullChunkOutputFile(google.protobuf.StringValue) returns (PullChunkOutputFileResponse) {}
 
   // Repo utils service points
   rpc repoGetPackageVersion(google.protobuf.StringValue) returns (stream CommandOutput) {}
@@ -408,7 +410,11 @@ message GraphicsPushSnapshotRequest {
 message ChunkParameters {
   string rmarkdownParameters = 1;
   string chunkText = 2;
-  string outputDirectory = 3;
+}
+
+message PullChunkOutputFileResponse {
+  string message = 1;
+  bytes content = 2;
 }
 
 message RepoInstallPackageRequest {
