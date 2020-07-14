@@ -125,6 +125,7 @@ message Init {
   string workspaceFile = 3;
   bool loadWorkspace = 4;
   bool saveOnExit = 5;
+  string httpUserAgent = 6;
 }
 
 message GetInfoResponse {
