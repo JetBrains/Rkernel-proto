@@ -119,6 +119,7 @@ service RPIService {
   rpc loadEnvironment(LoadEnvironmentRequest) returns (google.protobuf.Empty) {}
   rpc setOutputWidth(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
   rpc clientRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc rStudioApiResponse(RObject) returns (google.protobuf.Empty) {}
   rpc setSaveOnExit(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
   rpc getLoadedShortS4ClassInfos(google.protobuf.Empty) returns (ShortS4ClassInfoList) {}
 }
@@ -191,6 +192,27 @@ message StackFrameList {
   repeated StackFrame frames = 1;
 }
 
+message RObject {
+  message RString {
+    string string = 1;
+  }
+  message RInt {
+    int64 int = 1;
+  }
+  message RDouble {
+    double double = 1;
+  }
+  message List {
+    repeated RObject rObjects = 1;
+  }
+  oneof object {
+    RString rString = 1;
+    RInt rInt = 2;
+    RDouble rDouble = 3;
+    List list = 4;
+  }
+}
+
 message AsyncEvent {
   message RequestReadLn {
     string prompt = 1;
@@ -214,6 +236,10 @@ message AsyncEvent {
     string filePath = 1;
     string title = 2;
   }
+  message RStudioApiRequest {
+    int32 functionID = 1;
+    RObject args = 2;
+  }
   oneof event {
     google.protobuf.Empty busy = 1;
     CommandOutput text = 2;
@@ -227,6 +253,7 @@ message AsyncEvent {
     HttpdResponse showHelpRequest = 10;
     google.protobuf.Empty subprocessInput = 11;
     string browseURLRequest = 12;
+    RStudioApiRequest rStudioApiRequest = 13;
   }
 }
 
