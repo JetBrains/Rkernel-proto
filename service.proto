@@ -109,6 +109,9 @@ service RPIService {
   rpc getWorkingDir(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
   rpc setWorkingDir(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
   rpc clearEnvironment(RRef) returns (google.protobuf.Empty) {}
+  rpc getSysEnv(GetSysEnvRequest) returns (StringList) {}
+  rpc loadInstalledPackages(google.protobuf.Empty) returns (RInstalledPackageList) {}
+  rpc loadLibPaths(google.protobuf.Empty) returns (RLibraryPathList) {}
   rpc loadLibrary(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
   rpc unloadLibrary(UnloadLibraryRequest) returns (google.protobuf.Empty) {}
   rpc saveGlobalEnvironment(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
@@ -604,4 +607,39 @@ message ExtraNamedArguments {
   // See org.jetbrains.r.hints.parameterInfo.RExtraNamedArgumentsInfo for details
   repeated string argNames = 1;
   repeated string funArgNames = 2;
+}
+
+message GetSysEnvRequest {
+  string envName = 1;
+  repeated string flags = 2;
+}
+
+message RLibraryPathList {
+  message RLibraryPath {
+    string path = 1;
+    bool isWritable = 2;
+  }
+
+  repeated RLibraryPath libPaths = 1;
+}
+
+message RInstalledPackageList {
+  message RInstalledPackage {
+    message MapEntry {
+      string key = 1;
+      string value = 2;
+    }
+    enum RPackagePriority {
+      BASE = 0;
+      RECOMMENDED = 1;
+      NA = 2;
+    }
+    string packageName = 1;
+    string packageVersion = 2;
+    RPackagePriority priority = 3;
+    string libraryPath = 4;
+    repeated MapEntry description = 5;
+  }
+
+  repeated RInstalledPackage packages = 1;
 }
