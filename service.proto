@@ -205,11 +205,17 @@ message RObject {
   message List {
     repeated RObject rObjects = 1;
   }
+  message RNull {}
+  message RBoolean {
+    bool boolean = 1;
+  }
   oneof object {
     RString rString = 1;
     RInt rInt = 2;
     RDouble rDouble = 3;
     List list = 4;
+    RNull rnull = 5;
+    RBoolean rboolean = 6;
   }
 }
 
