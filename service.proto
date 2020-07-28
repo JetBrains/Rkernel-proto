@@ -224,6 +224,7 @@ message RObject {
     RNull rnull = 5;
     RBoolean rboolean = 6;
     NamedList namedList = 7;
+    string error = 8;
   }
 }
 
