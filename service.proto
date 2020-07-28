@@ -134,6 +134,7 @@ message Init {
 
 message GetInfoResponse {
   string rVersion = 1;
+  int32 pid = 2;
 }
 
 message ExecuteCodeRequest {
