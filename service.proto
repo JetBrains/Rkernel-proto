@@ -29,6 +29,7 @@ service RPIService {
   rpc debugAddBreakpoint(DebugAddBreakpointRequest) returns (google.protobuf.Empty) {}
   rpc debugRemoveBreakpoint(SourcePosition) returns (google.protobuf.Empty) {}
   rpc debugCommandContinue(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc debugCommandKeepPrevious(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandPause(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandStop(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandStepOver(google.protobuf.Empty) returns (google.protobuf.Empty) {}
@@ -195,6 +196,8 @@ message AsyncEvent {
   message DebugPrompt {
     bool changed = 1;
     StackFrameList stack = 2;
+    bool isStep = 3;
+    bool isBreakpoint = 4;
   }
   message ViewRequest {
     int32 persistentRefIndex = 1;
