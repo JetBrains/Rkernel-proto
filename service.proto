@@ -642,7 +642,8 @@ message RInstalledPackageList {
     string packageVersion = 2;
     RPackagePriority priority = 3;
     string libraryPath = 4;
-    repeated MapEntry description = 5;
+    string canonicalPackagePath = 5;
+    repeated MapEntry description = 6;
   }
 
   repeated RInstalledPackage packages = 1;
