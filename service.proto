@@ -84,6 +84,7 @@ service RPIService {
   rpc loadObjectNames(RRef) returns (StringList) {}
   rpc findInheritorNamedArguments(RRef) returns (StringList) {}
   rpc findExtraNamedArguments(RRef) returns (ExtraNamedArguments) {}
+  rpc getS4ClassInfo(RRef) returns (S4ClassInfo) {}
   rpc getTableColumnsInfo(TableColumnsInfoRequest) returns (TableColumnsInfo) {}
   rpc getFormalArguments(RRef) returns (StringList) {}
   rpc getEqualityObject(RRef) returns (google.protobuf.Int64Value) {}
@@ -121,6 +122,7 @@ service RPIService {
   rpc setOutputWidth(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
   rpc clientRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc setSaveOnExit(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
+  rpc getLoadedShortS4ClassInfos(google.protobuf.Empty) returns (ShortS4ClassInfoList) {}
 }
 
 message Init {
@@ -647,4 +649,26 @@ message RInstalledPackageList {
   }
 
   repeated RInstalledPackage packages = 1;
+}
+
+message S4ClassInfo {
+  message S4ClassSlot {
+    string name = 1;
+    string type = 2;
+  }
+  string className = 1;
+  string packageName = 2;
+  repeated S4ClassSlot slots = 3;
+  repeated string superClasses = 4;
+  bool isVirtual = 5;
+}
+
+message ShortS4ClassInfoList {
+  message ShortS4ClassInfo {
+    string name = 1;
+    string package = 2;
+    bool isVirtual = 3;
+  }
+
+  repeated ShortS4ClassInfo shortS4ClassInfos = 1;
 }
