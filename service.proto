@@ -100,11 +100,12 @@ service RPIService {
   rpc dataFrameFilter(DataFrameFilterRequest) returns (google.protobuf.Int32Value) {}
   rpc dataFrameDispose(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
 
-  // Documentation
+  // Documentation and http
   rpc convertRoxygenToHTML(ConvertRoxygenToHTMLRequest) returns (ConvertRoxygenToHTMLResponse) {}
   rpc httpdRequest(google.protobuf.StringValue) returns (HttpdResponse) {}
   rpc getDocumentationForPackage(google.protobuf.StringValue) returns (HttpdResponse) {}
   rpc getDocumentationForSymbol(DocumentationForSymbolRequest) returns (HttpdResponse) {}
+  rpc startHttpd(google.protobuf.Empty) returns (google.protobuf.Int32Value) {}
 
   // Misc
   rpc getWorkingDir(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
@@ -212,7 +213,6 @@ message AsyncEvent {
   message ShowFileRequest {
     string filePath = 1;
     string title = 2;
-    bytes content = 3;
   }
   oneof event {
     google.protobuf.Empty busy = 1;
