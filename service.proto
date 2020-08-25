@@ -26,10 +26,10 @@ service RPIService {
   rpc getAsyncEvents(google.protobuf.Empty) returns (stream AsyncEvent) {}
 
   // Debugger
-  rpc debugAddBreakpoint(DebugAddBreakpointRequest) returns (google.protobuf.Empty) {}
-  rpc debugRemoveBreakpoint(SourcePosition) returns (google.protobuf.Empty) {}
+  rpc debugAddOrModifyBreakpoint(DebugAddOrModifyBreakpointRequest) returns (google.protobuf.Empty) {}
+  rpc debugSetMasterBreakpoint(DebugSetMasterBreakpointRequest) returns (google.protobuf.Empty) {}
+  rpc debugRemoveBreakpoint(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
   rpc debugCommandContinue(google.protobuf.Empty) returns (google.protobuf.Empty) {}
-  rpc debugCommandKeepPrevious(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandPause(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandStop(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandStepOver(google.protobuf.Empty) returns (google.protobuf.Empty) {}
@@ -38,6 +38,9 @@ service RPIService {
   rpc debugCommandStepOut(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandRunToPosition(SourcePosition) returns (google.protobuf.Empty) {}
   rpc debugMuteBreakpoints(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
+  rpc getFunctionSourcePosition(RRef) returns (SourcePosition) {}
+  rpc getSourceFileText(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
+  rpc getSourceFileName(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
 
   // Graphics device service points
   rpc graphicsInit(GraphicsInitRequest) returns (stream CommandOutput) {}
@@ -75,9 +78,6 @@ service RPIService {
   rpc evaluateAsText(RRef) returns (StringOrError) {}
   rpc evaluateAsBoolean(RRef) returns (google.protobuf.BoolValue) {}
   rpc getDistinctStrings(RRef) returns (StringList) {}
-  rpc getFunctionSourcePosition(RRef) returns (SourcePosition) {}
-  rpc getSourceFileText(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
-  rpc getSourceFileName(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
   rpc loadObjectNames(RRef) returns (StringList) {}
   rpc findInheritorNamedArguments(RRef) returns (StringList) {}
   rpc findExtraNamedArguments(RRef) returns (ExtraNamedArguments) {}
@@ -147,12 +147,13 @@ message ExecuteCodeRequest {
   string code = 1;
   string sourceFileId = 2;
   int32 sourceFileLineOffset = 3;
-  bool withEcho = 4;
-  bool streamOutput = 5;
-  bool isRepl = 6;
-  bool isDebug = 7;
-  DebugCommand firstDebugCommand = 8;
-  bool setLastValue = 9;
+  int32 sourceFileFirstLineOffset = 4;
+  bool withEcho = 5;
+  bool streamOutput = 6;
+  bool isRepl = 7;
+  bool isDebug = 8;
+  DebugCommand firstDebugCommand = 9;
+  bool setLastValue = 10;
 }
 
 message CommandOutput {
@@ -185,6 +186,7 @@ message StackFrame {
   SourcePosition position = 1;
   string functionName = 2;
   int64 equalityObject = 3;
+  ExtendedSourcePosition extendedSourcePosition = 4;
 }
 
 message StackFrameList {
@@ -234,8 +236,6 @@ message AsyncEvent {
   message DebugPrompt {
     bool changed = 1;
     StackFrameList stack = 2;
-    bool isStep = 3;
-    bool isBreakpoint = 4;
   }
   message ViewRequest {
     int32 persistentRefIndex = 1;
@@ -268,6 +268,8 @@ message AsyncEvent {
     google.protobuf.Empty subprocessInput = 11;
     string browseURLRequest = 12;
     RStudioApiRequest rStudioApiRequest = 13;
+    int32 debugRemoveBreakpointRequest = 14;
+    SourcePosition debugPrintSourcePositionToConsoleRequest = 15;
   }
 }
 
@@ -276,11 +278,32 @@ message SourcePosition {
   int32 line = 2;
 }
 
-message DebugAddBreakpointRequest {
-  SourcePosition position = 1;
-  bool suspend = 2;
-  string evaluateAndLog = 3;
-  string condition = 4;
+message ExtendedSourcePosition {
+    int32 startLine = 1;
+    int32 startOffset = 2;
+    int32 endLine = 3;
+    int32 endOffset = 4;
+}
+
+message DebugAddOrModifyBreakpointRequest {
+  int32 id = 1;
+  SourcePosition position = 2;
+  bool enabled = 3;
+  bool suspend = 4;
+  string evaluateAndLog = 5;
+  string condition = 6;
+  bool removeAfterHit = 7;
+  bool hitMessage = 8;
+  bool printStack = 9;
+}
+
+message DebugSetMasterBreakpointRequest {
+  int32 breakpointId = 1;
+  oneof master {
+    google.protobuf.Empty none = 2;
+    int32 masterId = 3;
+  }
+  bool leaveEnabled = 4;
 }
 
 message RRef {
