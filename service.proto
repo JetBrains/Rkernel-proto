@@ -34,7 +34,7 @@ service RPIService {
   rpc debugCommandStop(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandStepOver(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandStepInto(google.protobuf.Empty) returns (google.protobuf.Empty) {}
-  rpc debugCommandForceStepInto(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc debugCommandStepIntoMyCode(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandStepOut(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandRunToPosition(SourcePosition) returns (google.protobuf.Empty) {}
   rpc debugMuteBreakpoints(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
