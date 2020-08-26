@@ -187,6 +187,7 @@ message StackFrame {
   string functionName = 2;
   int64 equalityObject = 3;
   ExtendedSourcePosition extendedSourcePosition = 4;
+  string sourcePositionText = 5;
 }
 
 message StackFrameList {
