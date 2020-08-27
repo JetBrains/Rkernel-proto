@@ -23,7 +23,7 @@ service RPIService {
   rpc sendReadLn(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
   rpc sendEof(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc replInterrupt(google.protobuf.Empty) returns (google.protobuf.Empty) {}
-  rpc getNextAsyncEvent(google.protobuf.Empty) returns (AsyncEvent) {}
+  rpc getAsyncEvents(google.protobuf.Empty) returns (stream AsyncEvent) {}
 
   // Debugger
   rpc debugAddBreakpoint(DebugAddBreakpointRequest) returns (google.protobuf.Empty) {}
