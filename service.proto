@@ -221,8 +221,8 @@ message RObject {
     RInt rInt = 2;
     RDouble rDouble = 3;
     List list = 4;
-    RNull rnull = 5;
-    RBoolean rboolean = 6;
+    RNull rNull = 5;
+    RBoolean rBoolean = 6;
     NamedList namedList = 7;
     string error = 8;
   }
