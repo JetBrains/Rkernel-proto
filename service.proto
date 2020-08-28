@@ -38,7 +38,7 @@ service RPIService {
   rpc debugCommandStepOut(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc debugCommandRunToPosition(SourcePosition) returns (google.protobuf.Empty) {}
   rpc debugMuteBreakpoints(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
-  rpc getFunctionSourcePosition(RRef) returns (SourcePosition) {}
+  rpc getFunctionSourcePosition(RRef) returns (GetFunctionSourcePositionResponse) {}
   rpc getSourceFileText(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
   rpc getSourceFileName(google.protobuf.StringValue) returns (google.protobuf.StringValue) {}
 
@@ -279,11 +279,16 @@ message SourcePosition {
   int32 line = 2;
 }
 
+message GetFunctionSourcePositionResponse {
+  SourcePosition position = 1;
+  string sourcePositionText = 2;
+}
+
 message ExtendedSourcePosition {
-    int32 startLine = 1;
-    int32 startOffset = 2;
-    int32 endLine = 3;
-    int32 endOffset = 4;
+  int32 startLine = 1;
+  int32 startOffset = 2;
+  int32 endLine = 3;
+  int32 endOffset = 4;
 }
 
 message DebugAddOrModifyBreakpointRequest {
