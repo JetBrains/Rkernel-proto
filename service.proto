@@ -46,7 +46,6 @@ service RPIService {
   rpc graphicsRescaleStored(GraphicsRescaleStoredRequest) returns (stream CommandOutput) {}
   rpc graphicsPullChangedNumbers(google.protobuf.Empty) returns (Int32List) {}
   rpc graphicsPullSnapshot(GraphicsPullSnapshotRequest) returns (GraphicsPullSnapshotResponse) {}
-  rpc graphicsPushSnapshot(GraphicsPushSnapshotRequest) returns (google.protobuf.StringValue) {}
   rpc graphicsCreateGroup(google.protobuf.Empty) returns (stream CommandOutput) {}
   rpc graphicsRemoveGroup(google.protobuf.StringValue) returns (stream CommandOutput) {}
   rpc graphicsShutdown(google.protobuf.Empty) returns (stream CommandOutput) {}
@@ -404,12 +403,6 @@ message GraphicsPullSnapshotResponse {
   string snapshotName = 2;
   bytes content = 3;
   bytes recorded = 4;
-}
-
-message GraphicsPushSnapshotRequest {
-  string groupId = 1;
-  int32 snapshotNumber = 2;
-  bytes recorded = 3;
 }
 
 message ChunkParameters {
