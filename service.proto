@@ -41,10 +41,9 @@ service RPIService {
 
   // Graphics device service points
   rpc graphicsInit(GraphicsInitRequest) returns (stream CommandOutput) {}
-  rpc graphicsDump(google.protobuf.Empty) returns (stream CommandOutput) {}
+  rpc graphicsDump(google.protobuf.Empty) returns (GraphicsDumpResponse) {}
   rpc graphicsRescale(GraphicsRescaleRequest) returns (stream CommandOutput) {}
   rpc graphicsRescaleStored(GraphicsRescaleStoredRequest) returns (stream CommandOutput) {}
-  rpc graphicsPullChangedNumbers(google.protobuf.Empty) returns (Int32List) {}
   rpc graphicsGetSnapshotPath(GraphicsGetSnapshotPathRequest) returns (GraphicsGetSnapshotPathResponse) {}
   rpc graphicsCreateGroup(google.protobuf.Empty) returns (stream CommandOutput) {}
   rpc graphicsRemoveGroup(google.protobuf.StringValue) returns (stream CommandOutput) {}
@@ -420,6 +419,11 @@ message ScreenParameters {
 message GraphicsInitRequest {
   ScreenParameters screenParameters = 1;
   bool inMemory = 2;
+}
+
+message GraphicsDumpResponse {
+  string message = 1;
+  map<int32, ScreenParameters> number2Parameters = 2;
 }
 
 message GraphicsRescaleRequest {
