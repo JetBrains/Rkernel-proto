@@ -48,6 +48,7 @@ service RPIService {
   rpc graphicsRescale(GraphicsRescaleRequest) returns (stream CommandOutput) {}
   rpc graphicsRescaleStored(GraphicsRescaleStoredRequest) returns (stream CommandOutput) {}
   rpc graphicsGetSnapshotPath(GraphicsGetSnapshotPathRequest) returns (GraphicsGetSnapshotPathResponse) {}
+  rpc graphicsFetchPlot(google.protobuf.Int32Value) returns (GraphicsFetchPlotResponse) {}
   rpc graphicsCreateGroup(google.protobuf.Empty) returns (stream CommandOutput) {}
   rpc graphicsRemoveGroup(google.protobuf.StringValue) returns (stream CommandOutput) {}
   rpc graphicsShutdown(google.protobuf.Empty) returns (stream CommandOutput) {}
@@ -477,6 +478,101 @@ message GraphicsGetSnapshotPathResponse {
   string message = 1;
   string snapshotName = 2;
   string directory = 3;
+}
+
+message Font {
+  string name = 1;
+  double size = 2;
+}
+
+message Stroke {
+  double width = 1;
+}
+
+message AffinePoint {
+  double xScale = 1;
+  double xOffset = 2;
+  double yScale = 3;
+  double yOffset = 4;
+}
+
+message Viewport {
+  AffinePoint from = 1;
+  AffinePoint to = 2;
+}
+
+message CircleFigure {
+  AffinePoint center = 1;
+  double radius = 2;
+  int32 strokeIndex = 3;
+  int32 colorIndex = 4;
+  int32 fillIndex = 5;
+}
+
+message LineFigure {
+  AffinePoint from = 1;
+  AffinePoint to = 2;
+  int32 strokeIndex = 3;
+  int32 colorIndex = 4;
+}
+
+message PolygonFigure {
+  repeated AffinePoint point = 1;
+  int32 strokeIndex = 2;
+  int32 colorIndex = 3;
+  int32 fillIndex = 4;
+}
+
+message PolylineFigure {
+  repeated AffinePoint point = 1;
+  int32 strokeIndex = 2;
+  int32 colorIndex = 3;
+}
+
+message RectangleFigure {
+  AffinePoint from = 1;
+  AffinePoint to = 2;
+  int32 strokeIndex = 3;
+  int32 colorIndex = 4;
+  int32 fillIndex = 5;
+}
+
+message TextFigure {
+  string text = 1;
+  AffinePoint position = 2;
+  double angle = 3;
+  double anchor = 4;
+  int32 fontIndex = 5;
+  int32 colorIndex = 6;
+}
+
+message Figure {
+  oneof kind {
+    CircleFigure circle = 1;
+    LineFigure line = 2;
+    PolygonFigure polygon = 3;
+    PolylineFigure polyline = 4;
+    RectangleFigure rectangle = 5;
+    TextFigure text = 6;
+  }
+}
+
+message Layer {
+  int32 viewportIndex = 1;
+  repeated Figure figure = 2;
+}
+
+message Plot {
+  repeated Font font = 1;
+  repeated int32 color = 2;
+  repeated Stroke stroke = 3;
+  repeated Viewport viewport = 4;
+  repeated Layer layer = 5;
+}
+
+message GraphicsFetchPlotResponse {
+  string message = 1;
+  Plot plot = 2;
 }
 
 message ChunkParameters {
