@@ -81,7 +81,7 @@ service RPIService {
   rpc loadObjectNames(RRef) returns (StringList) {}
   rpc findInheritorNamedArguments(RRef) returns (StringList) {}
   rpc findExtraNamedArguments(RRef) returns (ExtraNamedArguments) {}
-  rpc getS4ClassInfo(RRef) returns (S4ClassInfo) {}
+  rpc getS4ClassInfoByObjectName(RRef) returns (S4ClassInfo) {}
   rpc getTableColumnsInfo(TableColumnsInfoRequest) returns (TableColumnsInfo) {}
   rpc getFormalArguments(RRef) returns (StringList) {}
   rpc getEqualityObject(RRef) returns (google.protobuf.Int64Value) {}
@@ -121,6 +121,7 @@ service RPIService {
   rpc rStudioApiResponse(RObject) returns (google.protobuf.Empty) {}
   rpc setSaveOnExit(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
   rpc getLoadedShortS4ClassInfos(google.protobuf.Empty) returns (ShortS4ClassInfoList) {}
+  rpc getS4ClassInfoByClassName(google.protobuf.StringValue) returns (S4ClassInfo) {}
 }
 
 message Init {
