@@ -560,6 +560,7 @@ message Figure {
 message Layer {
   int32 viewportIndex = 1;
   repeated Figure figure = 2;
+  bool isAxisText = 3;
 }
 
 message Plot {
