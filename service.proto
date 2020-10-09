@@ -496,6 +496,12 @@ message AffinePoint {
   double yOffset = 4;
 }
 
+message RasterImage {
+  int32 width = 1;
+  int32 height = 2;
+  bytes data = 3;  // little-endian uint32[] ARGB
+}
+
 message Viewport {
   AffinePoint from = 1;
   AffinePoint to = 2;
@@ -529,6 +535,14 @@ message PolylineFigure {
   int32 colorIndex = 3;
 }
 
+message RasterFigure {
+  RasterImage image = 1;
+  AffinePoint from = 2;
+  AffinePoint to = 3;
+  double angle = 4;
+  bool interpolate = 5;
+}
+
 message RectangleFigure {
   AffinePoint from = 1;
   AffinePoint to = 2;
@@ -552,8 +566,9 @@ message Figure {
     LineFigure line = 2;
     PolygonFigure polygon = 3;
     PolylineFigure polyline = 4;
-    RectangleFigure rectangle = 5;
-    TextFigure text = 6;
+    RasterFigure raster = 5;
+    RectangleFigure rectangle = 6;
+    TextFigure text = 7;
   }
 }
 
