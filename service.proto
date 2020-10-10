@@ -502,9 +502,23 @@ message RasterImage {
   bytes data = 3;  // little-endian uint32[] ARGB
 }
 
-message Viewport {
+message FixedViewport {
+  double ratio = 1;
+  double delta = 2;
+  int32 parentIndex = 3;
+}
+
+message FreeViewport {
   AffinePoint from = 1;
   AffinePoint to = 2;
+  int32 parentIndex = 3;
+}
+
+message Viewport {
+  oneof kind {
+    FixedViewport fixed = 1;
+    FreeViewport free = 2;
+  }
 }
 
 message CircleFigure {
@@ -574,8 +588,9 @@ message Figure {
 
 message Layer {
   int32 viewportIndex = 1;
-  repeated Figure figure = 2;
-  bool isAxisText = 3;
+  int32 clippingAreaIndex = 2;
+  repeated Figure figure = 3;
+  bool isAxisText = 4;
 }
 
 message Plot {
