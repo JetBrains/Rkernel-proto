@@ -488,6 +488,10 @@ message Font {
 
 message Stroke {
   double width = 1;
+  int32 cap = 2;
+  int32 join = 3;
+  double miterLimit = 4;
+  int32 pattern = 5;
 }
 
 message AffinePoint {
