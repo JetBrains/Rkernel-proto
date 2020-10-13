@@ -528,10 +528,11 @@ message Viewport {
 
 message CircleFigure {
   AffinePoint center = 1;
-  double radius = 2;
-  int32 strokeIndex = 3;
-  int32 colorIndex = 4;
-  int32 fillIndex = 5;
+  double radiusScale = 2;
+  double radiusOffset = 3;
+  int32 strokeIndex = 4;
+  int32 colorIndex = 5;
+  int32 fillIndex = 6;
 }
 
 message LineFigure {
