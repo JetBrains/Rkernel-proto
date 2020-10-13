@@ -483,6 +483,7 @@ message GraphicsGetSnapshotPathResponse {
 message Font {
   string name = 1;
   double size = 2;
+  int32 style = 3;
 }
 
 message Stroke {
