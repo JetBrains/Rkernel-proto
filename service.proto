@@ -482,23 +482,23 @@ message GraphicsGetSnapshotPathResponse {
 
 message Font {
   string name = 1;
-  double size = 2;
+  float size = 2;
   int32 style = 3;
 }
 
 message Stroke {
-  double width = 1;
+  float width = 1;
   int32 cap = 2;
   int32 join = 3;
-  double miterLimit = 4;
+  float miterLimit = 4;
   int32 pattern = 5;
 }
 
 message AffinePoint {
-  double xScale = 1;
-  double xOffset = 2;
-  double yScale = 3;
-  double yOffset = 4;
+  float xScale = 1;
+  float xOffset = 2;
+  float yScale = 3;
+  float yOffset = 4;
 }
 
 message RasterImage {
@@ -508,8 +508,8 @@ message RasterImage {
 }
 
 message FixedViewport {
-  double ratio = 1;
-  double delta = 2;
+  float ratio = 1;
+  float delta = 2;
   int32 parentIndex = 3;
 }
 
@@ -528,8 +528,8 @@ message Viewport {
 
 message CircleFigure {
   AffinePoint center = 1;
-  double radiusScale = 2;
-  double radiusOffset = 3;
+  float radiusScale = 2;
+  float radiusOffset = 3;
   int32 strokeIndex = 4;
   int32 colorIndex = 5;
   int32 fillIndex = 6;
@@ -559,7 +559,7 @@ message RasterFigure {
   RasterImage image = 1;
   AffinePoint from = 2;
   AffinePoint to = 3;
-  double angle = 4;
+  float angle = 4;
   bool interpolate = 5;
 }
 
@@ -574,8 +574,8 @@ message RectangleFigure {
 message TextFigure {
   string text = 1;
   AffinePoint position = 2;
-  double angle = 3;
-  double anchor = 4;
+  float angle = 3;
+  float anchor = 4;
   int32 fontIndex = 5;
   int32 colorIndex = 6;
 }
