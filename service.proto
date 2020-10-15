@@ -47,6 +47,7 @@ service RPIService {
   rpc graphicsDump(google.protobuf.Empty) returns (GraphicsDumpResponse) {}
   rpc graphicsRescale(GraphicsRescaleRequest) returns (stream CommandOutput) {}
   rpc graphicsRescaleStored(GraphicsRescaleStoredRequest) returns (stream CommandOutput) {}
+  rpc graphicsSetParameters(ScreenParameters) returns (google.protobuf.Empty) {}
   rpc graphicsGetSnapshotPath(GraphicsGetSnapshotPathRequest) returns (GraphicsGetSnapshotPathResponse) {}
   rpc graphicsFetchPlot(google.protobuf.Int32Value) returns (GraphicsFetchPlotResponse) {}
   rpc graphicsCreateGroup(google.protobuf.Empty) returns (stream CommandOutput) {}
