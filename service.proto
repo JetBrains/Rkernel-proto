@@ -502,6 +502,10 @@ message AffinePoint {
   float yOffset = 4;
 }
 
+message SubPath {
+  repeated AffinePoint point = 1;
+}
+
 message RasterImage {
   int32 width = 1;
   int32 height = 2;
@@ -541,6 +545,14 @@ message LineFigure {
   AffinePoint to = 2;
   int32 strokeIndex = 3;
   int32 colorIndex = 4;
+}
+
+message PathFigure {
+  repeated SubPath subPath = 1;
+  bool winding = 2;
+  int32 strokeIndex = 3;
+  int32 colorIndex = 4;
+  int32 fillIndex = 5;
 }
 
 message PolygonFigure {
@@ -585,11 +597,12 @@ message Figure {
   oneof kind {
     CircleFigure circle = 1;
     LineFigure line = 2;
-    PolygonFigure polygon = 3;
-    PolylineFigure polyline = 4;
-    RasterFigure raster = 5;
-    RectangleFigure rectangle = 6;
-    TextFigure text = 7;
+    PathFigure path = 3;
+    PolygonFigure polygon = 4;
+    PolylineFigure polyline = 5;
+    RasterFigure raster = 6;
+    RectangleFigure rectangle = 7;
+    TextFigure text = 8;
   }
 }
 
