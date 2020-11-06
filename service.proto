@@ -500,15 +500,8 @@ message Stroke {
   int32 pattern = 5;
 }
 
-message AffinePoint {
-  float xScale = 1;
-  float xOffset = 2;
-  float yScale = 3;
-  float yOffset = 4;
-}
-
 message SubPath {
-  repeated AffinePoint point = 1;
+  repeated fixed64 point = 1;
 }
 
 message RasterImage {
@@ -524,8 +517,8 @@ message FixedViewport {
 }
 
 message FreeViewport {
-  AffinePoint from = 1;
-  AffinePoint to = 2;
+  fixed64 from = 1;
+  fixed64 to = 2;
   int32 parentIndex = 3;
 }
 
@@ -537,17 +530,16 @@ message Viewport {
 }
 
 message CircleFigure {
-  AffinePoint center = 1;
-  float radiusScale = 2;
-  float radiusOffset = 3;
-  int32 strokeIndex = 4;
-  int32 colorIndex = 5;
-  int32 fillIndex = 6;
+  fixed64 center = 1;
+  fixed32 radius = 2;
+  int32 strokeIndex = 3;
+  int32 colorIndex = 4;
+  int32 fillIndex = 5;
 }
 
 message LineFigure {
-  AffinePoint from = 1;
-  AffinePoint to = 2;
+  fixed64 from = 1;
+  fixed64 to = 2;
   int32 strokeIndex = 3;
   int32 colorIndex = 4;
 }
@@ -561,29 +553,29 @@ message PathFigure {
 }
 
 message PolygonFigure {
-  repeated AffinePoint point = 1;
+  repeated fixed64 point = 1;
   int32 strokeIndex = 2;
   int32 colorIndex = 3;
   int32 fillIndex = 4;
 }
 
 message PolylineFigure {
-  repeated AffinePoint point = 1;
+  repeated fixed64 point = 1;
   int32 strokeIndex = 2;
   int32 colorIndex = 3;
 }
 
 message RasterFigure {
   RasterImage image = 1;
-  AffinePoint from = 2;
-  AffinePoint to = 3;
+  fixed64 from = 2;
+  fixed64 to = 3;
   float angle = 4;
   bool interpolate = 5;
 }
 
 message RectangleFigure {
-  AffinePoint from = 1;
-  AffinePoint to = 2;
+  fixed64 from = 1;
+  fixed64 to = 2;
   int32 strokeIndex = 3;
   int32 colorIndex = 4;
   int32 fillIndex = 5;
@@ -591,7 +583,7 @@ message RectangleFigure {
 
 message TextFigure {
   string text = 1;
-  AffinePoint position = 2;
+  fixed64 position = 2;
   float angle = 3;
   float anchor = 4;
   int32 fontIndex = 5;
