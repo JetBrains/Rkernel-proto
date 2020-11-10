@@ -616,7 +616,9 @@ message Plot {
   repeated Stroke stroke = 3;
   repeated Viewport viewport = 4;
   repeated Layer layer = 5;
-  int32 error = 6;
+  int32 previewComplexity = 6;
+  int32 totalComplexity = 7;
+  int32 error = 8;
 }
 
 message GraphicsFetchPlotResponse {
