@@ -500,8 +500,9 @@ message Stroke {
   int32 pattern = 5;
 }
 
-message SubPath {
+message Polyline {
   repeated fixed64 point = 1;
+  int32 previewCount = 2;
 }
 
 message RasterImage {
@@ -545,7 +546,7 @@ message LineFigure {
 }
 
 message PathFigure {
-  repeated SubPath subPath = 1;
+  repeated Polyline subPath = 1;
   bool winding = 2;
   int32 strokeIndex = 3;
   int32 colorIndex = 4;
@@ -553,14 +554,14 @@ message PathFigure {
 }
 
 message PolygonFigure {
-  repeated fixed64 point = 1;
+  Polyline polyline = 1;
   int32 strokeIndex = 2;
   int32 colorIndex = 3;
   int32 fillIndex = 4;
 }
 
 message PolylineFigure {
-  repeated fixed64 point = 1;
+  Polyline polyline = 1;
   int32 strokeIndex = 2;
   int32 colorIndex = 3;
 }
