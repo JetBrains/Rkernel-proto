@@ -98,7 +98,7 @@ service RPIService {
   rpc dataFrameGetData(DataFrameGetDataRequest) returns (DataFrameGetDataResponse) {}
   rpc dataFrameSort(DataFrameSortRequest) returns (google.protobuf.Int32Value) {}
   rpc dataFrameFilter(DataFrameFilterRequest) returns (google.protobuf.Int32Value) {}
-  rpc dataFrameDispose(google.protobuf.Int32Value) returns (google.protobuf.Empty) {}
+  rpc dataFrameRefresh(RRef) returns (google.protobuf.BoolValue) {}
 
   // Documentation and http
   rpc convertRoxygenToHTML(ConvertRoxygenToHTMLRequest) returns (ConvertRoxygenToHTMLResponse) {}
@@ -246,6 +246,10 @@ message AsyncEvent {
     string title = 2;
     ValueInfo value = 3;
   }
+  message ViewTableRequest {
+    int32 persistentRefIndex = 1;
+    string title = 2;
+  }
   message Exception {
     ExceptionInfo exception = 1;
     StackFrameList stack = 2;
@@ -274,6 +278,7 @@ message AsyncEvent {
     RStudioApiRequest rStudioApiRequest = 13;
     int32 debugRemoveBreakpointRequest = 14;
     SourcePosition debugPrintSourcePositionToConsoleRequest = 15;
+    ViewTableRequest viewTableRequest = 16;
   }
 }
 
@@ -686,6 +691,7 @@ message DataFrameInfoResponse {
   }
   int32 nRows = 1;
   repeated Column columns = 2;
+  bool canRefresh = 3;
 }
 
 message DataFrameGetDataRequest {
