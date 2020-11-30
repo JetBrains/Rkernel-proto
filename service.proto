@@ -122,6 +122,7 @@ service RPIService {
   rpc clientRequestFinished(google.protobuf.Empty) returns (google.protobuf.Empty) {}
   rpc rStudioApiResponse(RObject) returns (google.protobuf.Empty) {}
   rpc setSaveOnExit(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
+  rpc setRStudioApiEnabled(google.protobuf.BoolValue) returns (stream CommandOutput) {}
   rpc getLoadedShortS4ClassInfos(google.protobuf.Empty) returns (ShortS4ClassInfoList) {}
   rpc getS4ClassInfoByClassName(google.protobuf.StringValue) returns (S4ClassInfo) {}
 }
