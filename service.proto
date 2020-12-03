@@ -135,6 +135,7 @@ message Init {
   bool loadWorkspace = 4;
   bool saveOnExit = 5;
   string httpUserAgent = 6;
+  bool enableRStudioApi = 7;
 }
 
 message GetInfoResponse {
