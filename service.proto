@@ -84,6 +84,7 @@ service RPIService {
   rpc findInheritorNamedArguments(RRef) returns (StringList) {}
   rpc findExtraNamedArguments(RRef) returns (ExtraNamedArguments) {}
   rpc getS4ClassInfoByObjectName(RRef) returns (S4ClassInfo) {}
+  rpc getR6ClassInfoByObjectName(RRef) returns (R6ClassInfo) {}
   rpc getTableColumnsInfo(TableColumnsInfoRequest) returns (TableColumnsInfo) {}
   rpc getFormalArguments(RRef) returns (StringList) {}
   rpc getEqualityObject(RRef) returns (google.protobuf.Int64Value) {}
@@ -125,6 +126,8 @@ service RPIService {
   rpc setRStudioApiEnabled(google.protobuf.BoolValue) returns (stream CommandOutput) {}
   rpc getLoadedShortS4ClassInfos(google.protobuf.Empty) returns (ShortS4ClassInfoList) {}
   rpc getS4ClassInfoByClassName(google.protobuf.StringValue) returns (S4ClassInfo) {}
+  rpc getLoadedShortR6ClassInfos(google.protobuf.Empty) returns (ShortR6ClassInfoList) {}
+  rpc getR6ClassInfoByClassName(google.protobuf.StringValue) returns (R6ClassInfo) {}
 }
 
 message Init {
@@ -400,6 +403,7 @@ message ValueInfo {
     bool isComplete = 2;
     bool isVector = 3;
     bool isS4 = 4;
+    bool isR6 = 5;
   }
   message List {
     int64 length = 1;
@@ -883,4 +887,28 @@ message ShortS4ClassInfoList {
   }
 
   repeated ShortS4ClassInfo shortS4ClassInfos = 1;
+}
+
+message R6ClassInfo {
+  message R6ClassMember {
+    string name = 1;
+    bool isPublic = 2;
+  }
+
+  message R6ClassActiveBinding {
+    string name = 1;
+  }
+
+  string className = 1;
+  repeated string superClasses = 2;
+  repeated R6ClassMember members = 3;
+  repeated R6ClassActiveBinding activeBindings = 4;
+}
+
+message ShortR6ClassInfoList {
+  message ShortR6ClassInfo {
+    string name = 1;
+  }
+
+  repeated ShortR6ClassInfo shortR6ClassInfos = 1;
 }
