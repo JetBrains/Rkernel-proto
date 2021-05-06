@@ -867,11 +867,16 @@ message S4ClassInfo {
   message S4ClassSlot {
     string name = 1;
     string type = 2;
+    string declarationClass = 3;
+  }
+  message S4SuperClass {
+    string name = 1;
+    bool isDirectInheritance = 2;
   }
   string className = 1;
   string packageName = 2;
   repeated S4ClassSlot slots = 3;
-  repeated string superClasses = 4;
+  repeated S4SuperClass superClasses = 4;
   bool isVirtual = 5;
 }
 
