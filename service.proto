@@ -871,7 +871,7 @@ message S4ClassInfo {
   }
   message S4SuperClass {
     string name = 1;
-    bool isDirectInheritance = 2;
+    int32 distance = 2;
   }
   string className = 1;
   string packageName = 2;
