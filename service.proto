@@ -5,6 +5,7 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
+import "classes.proto";
 
 option java_package = "org.jetbrains.r.rinterop";
 option java_multiple_files = true;
@@ -83,8 +84,8 @@ service RPIService {
   rpc loadObjectNames(RRef) returns (StringList) {}
   rpc findInheritorNamedArguments(RRef) returns (StringList) {}
   rpc findExtraNamedArguments(RRef) returns (ExtraNamedArguments) {}
-  rpc getS4ClassInfoByObjectName(RRef) returns (S4ClassInfo) {}
-  rpc getR6ClassInfoByObjectName(RRef) returns (R6ClassInfo) {}
+  rpc getS4ClassInfoByObjectName(RRef) returns (classes.S4ClassInfo) {}
+  rpc getR6ClassInfoByObjectName(RRef) returns (classes.R6ClassInfo) {}
   rpc getTableColumnsInfo(TableColumnsInfoRequest) returns (TableColumnsInfo) {}
   rpc getFormalArguments(RRef) returns (StringList) {}
   rpc getEqualityObject(RRef) returns (google.protobuf.Int64Value) {}
@@ -124,10 +125,10 @@ service RPIService {
   rpc rStudioApiResponse(RObject) returns (google.protobuf.Empty) {}
   rpc setSaveOnExit(google.protobuf.BoolValue) returns (google.protobuf.Empty) {}
   rpc setRStudioApiEnabled(google.protobuf.BoolValue) returns (stream CommandOutput) {}
-  rpc getLoadedShortS4ClassInfos(google.protobuf.Empty) returns (ShortS4ClassInfoList) {}
-  rpc getS4ClassInfoByClassName(google.protobuf.StringValue) returns (S4ClassInfo) {}
-  rpc getLoadedShortR6ClassInfos(google.protobuf.Empty) returns (ShortR6ClassInfoList) {}
-  rpc getR6ClassInfoByClassName(google.protobuf.StringValue) returns (R6ClassInfo) {}
+  rpc getLoadedShortS4ClassInfos(google.protobuf.Empty) returns (classes.ShortS4ClassInfoList) {}
+  rpc getS4ClassInfoByClassName(google.protobuf.StringValue) returns (classes.S4ClassInfo) {}
+  rpc getLoadedShortR6ClassInfos(google.protobuf.Empty) returns (classes.ShortR6ClassInfoList) {}
+  rpc getR6ClassInfoByClassName(google.protobuf.StringValue) returns (classes.R6ClassInfo) {}
 }
 
 message Init {
@@ -864,61 +865,4 @@ message RInstalledPackageList {
   }
 
   repeated RInstalledPackage packages = 1;
-}
-
-message S4ClassInfo {
-  message S4ClassSlot {
-    string name = 1;
-    string type = 2;
-    string declarationClass = 3;
-  }
-  message S4SuperClass {
-    string name = 1;
-    int32 distance = 2;
-  }
-  string className = 1;
-  string packageName = 2;
-  repeated S4ClassSlot slots = 3;
-  repeated S4SuperClass superClasses = 4;
-  bool isVirtual = 5;
-}
-
-message ShortS4ClassInfoList {
-  message ShortS4ClassInfo {
-    string name = 1;
-    string package = 2;
-    bool isVirtual = 3;
-  }
-
-  repeated ShortS4ClassInfo shortS4ClassInfos = 1;
-}
-
-message R6ClassInfo {
-  message R6ClassField {
-    string name = 1;
-    bool isPublic = 2;
-  }
-
-  message R6ClassMethod {
-    string name = 1;
-    bool isPublic = 2;
-  }
-
-  message R6ClassActiveBinding {
-    string name = 1;
-  }
-
-  string className = 1;
-  repeated string superClasses = 2;
-  repeated R6ClassField fields = 3;
-  repeated R6ClassMethod methods = 4;
-  repeated R6ClassActiveBinding activeBindings = 5;
-}
-
-message ShortR6ClassInfoList {
-  message ShortR6ClassInfo {
-    string name = 1;
-  }
-
-  repeated ShortR6ClassInfo shortR6ClassInfos = 1;
 }

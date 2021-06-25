@@ -1,0 +1,68 @@
+/*
+ * Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+ */
+
+syntax = "proto3";
+
+option java_package = "org.jetbrains.r.classes";
+option java_multiple_files = true;
+
+package classes;
+
+message S4ClassInfo {
+  message S4ClassSlot {
+    string name = 1;
+    string type = 2;
+    string declarationClass = 3;
+  }
+  message S4SuperClass {
+    string name = 1;
+    int32 distance = 2;
+  }
+  string className = 1;
+  string packageName = 2;
+  repeated S4ClassSlot slots = 3;
+  repeated S4SuperClass superClasses = 4;
+  bool isVirtual = 5;
+}
+
+message ShortS4ClassInfoList {
+  message ShortS4ClassInfo {
+    string name = 1;
+    string package = 2;
+    bool isVirtual = 3;
+  }
+
+  repeated ShortS4ClassInfo shortS4ClassInfos = 1;
+}
+
+message R6ClassInfo {
+  message R6ClassField {
+    string name = 1;
+    bool isPublic = 2;
+  }
+
+  message R6ClassMethod {
+    string name = 1;
+    string parameterList = 2;
+    bool isPublic = 3;
+  }
+
+  message R6ClassActiveBinding {
+    string name = 1;
+  }
+
+  string className = 1;
+  repeated string superClasses = 2;
+  repeated R6ClassField fields = 3;
+  repeated R6ClassMethod methods = 4;
+  repeated R6ClassActiveBinding activeBindings = 5;
+}
+
+message ShortR6ClassInfoList {
+  message ShortR6ClassInfo {
+    string name = 1;
+  }
+
+  repeated ShortR6ClassInfo shortR6ClassInfos = 1;
+}
