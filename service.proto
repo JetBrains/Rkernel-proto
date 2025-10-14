@@ -7,7 +7,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "classes.proto";
 
-option java_package = "org.jetbrains.r.rinterop";
+option java_package = "com.intellij.r.psi.rinterop";
 option java_multiple_files = true;
 
 package rplugininterop;
